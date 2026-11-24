@@ -1,13 +1,7 @@
-// ==========================================
-// DEVIKA BEAUTY PARLOUR - CORE ENGINE (app.js)
-// ==========================================
-
 const TELEGRAM_BOT_TOKEN = "9185977713:AAGV56W4AVHzrtBiZDBhQVFUwdnzQm8aYqc";
 const TELEGRAM_CHAT_ID = "9107567121";
-const OWNER_PIN = "1234"; // Change anytime
-const PARLOUR_WHATSAPP = "919999999999"; // Replace with Devika Ji's 10-digit WhatsApp with 91
+const OWNER_PIN = "1234";
 
-// --- INITIAL DATA ---
 const DEFAULT_SERVICES = [
   { id: 1, cat: "Facial", name: "O3+ Bridal Glow Facial", brand: "O3+", price: 1499, time: 60, trending: true, benefits: "Instant diamond-like radiance, removes deep tan & dullness.", steps: "Cleansing → Micro-Exfoliation → O3+ Serum Massage → Peel-off Mask" },
   { id: 2, cat: "Facial", name: "Lotus Gold Radiance Facial", brand: "Lotus", price: 799, time: 45, trending: true, benefits: "24K Gold glow for parties & festivals.", steps: "Gold Cleanser → Scrub → Gold Gel Massage → Glow Pack" },
@@ -42,7 +36,6 @@ const SKIN_PROBLEMS = [
   { title: "✨ Quick Party Ready", recIds: [2, 5, 10] }
 ];
 
-// --- STATE ---
 let services = JSON.parse(localStorage.getItem("devika_services")) || DEFAULT_SERVICES;
 let bookings = JSON.parse(localStorage.getItem("devika_bookings")) || [];
 let shopOpen = JSON.parse(localStorage.getItem("devika_shop_open") ?? "true");
@@ -53,7 +46,6 @@ let selectedDay = "Today";
 let selectedSlot = "";
 let useCoins = false;
 
-// --- INIT ---
 window.addEventListener("DOMContentLoaded", () => {
   if (user) showAppShell();
   updateShopStatusUI();
@@ -64,14 +56,12 @@ window.addEventListener("DOMContentLoaded", () => {
   renderStore();
   startBannerSlider();
 
-  // Auth Buttons
   document.getElementById("btn-login").addEventListener("click", handleLogin);
   document.getElementById("btn-guest").addEventListener("click", () => {
     user = { name: "Guest", phone: "0000000000", coins: 50, totalSpent: 0, spinsLeft: 0, guest: true };
     showAppShell();
   });
 
-  // Search
   document.getElementById("global-search").addEventListener("input", (e) => {
     const q = e.target.value.toLowerCase();
     if (q.length > 1) {
@@ -80,7 +70,6 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Brand Filters
   document.querySelectorAll("#brand-filters .chip").forEach(btn => {
     btn.addEventListener("click", () => {
       document.querySelectorAll("#brand-filters .chip").forEach(b => b.classList.remove("active"));
@@ -89,7 +78,6 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Bridal Filters
   document.querySelectorAll("#bridal-filters .chip").forEach(btn => {
     btn.addEventListener("click", () => {
       document.querySelectorAll("#bridal-filters .chip").forEach(b => b.classList.remove("active"));
@@ -99,7 +87,6 @@ window.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-// --- AUTH ---
 function handleLogin() {
   const name = document.getElementById("auth-name").value.trim() || "Valued Guest";
   const phone = document.getElementById("auth-phone").value.trim();
@@ -122,7 +109,6 @@ function showAppShell() {
   switchScreen("screen-home");
 }
 
-// --- NAVIGATION ---
 function switchScreen(screenId, navBtn = null) {
   document.querySelectorAll("#app-shell .screen").forEach(s => s.classList.add("hidden"));
   document.getElementById(screenId).classList.remove("hidden");
@@ -143,7 +129,6 @@ function openCategory(cat) {
   renderServices(cat, "ALL");
 }
 
-// --- BANNER SLIDER ---
 function startBannerSlider() {
   const cards = document.querySelectorAll(".banner-card");
   let idx = 0;
@@ -154,7 +139,6 @@ function startBannerSlider() {
   }, 4000);
 }
 
-// --- RENDER SERVICES ---
 function createServiceCard(s) {
   const inCart = cart.find(c => c.id === s.id);
   return `
@@ -198,7 +182,6 @@ function openServiceDetail(id) {
   switchScreen("screen-detail");
 }
 
-// --- ADVISOR ---
 function renderAdvisor() {
   document.getElementById("problem-grid").innerHTML = SKIN_PROBLEMS.map((p, i) => `
     <button onclick="showAdvisorRec(${i})" style="width:100%;text-align:left;padding:14px;margin-bottom:10px;border-radius:14px;background:#181416;border:1px solid rgba(232,180,184,0.25);color:#fff;font-weight:600;cursor:pointer;">
@@ -212,7 +195,6 @@ function showAdvisorRec(idx) {
   document.getElementById("advisor-results").innerHTML = `<h3 class="section-heading" style="margin-top:15px;">Recommended For You:</h3>` + rec.map(createServiceCard).join("");
 }
 
-// --- BRIDAL LOOKBOOK ---
 function renderBridal(style) {
   const list = style === "ALL" ? BRIDAL_LOOKS : BRIDAL_LOOKS.filter(b => b.style === style);
   document.getElementById("bridal-gallery").innerHTML = list.map(b => {
@@ -246,7 +228,6 @@ function bookBridalQuick(title, price) {
   switchScreen("screen-cart");
 }
 
-// --- MINI STORE ---
 function renderStore() {
   document.getElementById("store-products").innerHTML = STORE_PRODUCTS.map(p => `
     <div style="background:#181416;border:1px solid rgba(232,180,184,0.2);border-radius:16px;padding:14px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;">
@@ -260,7 +241,6 @@ function renderStore() {
   `).join("");
 }
 
-// --- CART & BOOKING ---
 function toggleCart(id, isProduct = false) {
   const exists = cart.find(c => c.id === id);
   if (exists) {
@@ -365,7 +345,6 @@ async function confirmBooking(finalTotal, discount) {
   bookings.unshift(booking);
   localStorage.setItem("devika_bookings", JSON.stringify(bookings));
 
-  // Send Instant Telegram Alert to Devika Ji
   const msg = `🔔 *NEW BOOKING ALERT!* 👑\n\n🆔 *ID:* ${booking.id}\n👤 *Client:* ${booking.customer} (${booking.phone})\n📅 *Slot:* ${booking.day} at ${booking.slot}\n💅 *Services:* ${booking.items}\n💰 *Bill:* ₹${booking.total} (Coins Used: ${booking.coinsUsed})`;
   try {
     await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
@@ -377,4 +356,14 @@ async function confirmBooking(finalTotal, discount) {
 
   cart = [];
   useCoins = false;
-  upd
+  updateFloatingCart();
+  alert(`🎉 Booking Confirmed! ID: ${booking.id}\nDevika Ji has received your instant booking alert.`);
+  switchScreen("screen-wallet");
+}
+
+function renderWalletScreen() {
+  const tier = user.totalSpent >= 5000 ? "PLATINUM (10%)" : user.totalSpent >= 2000 ? "GOLD (8%)" : "SILVER (5%)";
+  document.getElementById("vip-card-container").innerHTML = `
+    <div style="background:linear-gradient(135deg,#2e1c22,#120e10);border:1px solid #d4af37;border-radius:20px;padding:20px;margin-bottom:16px;">
+      <span style="font-size:11px;color:#d4af37;letter-spacing:2px;">DEVIKA VIP CLUB</span>
+    
