@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Devika Beauty Parlour | Luxury Bridal Studio</title>
+  <meta name="theme-color" content="#0d0b0c" />
+  <link rel="manifest" href="manifest.json" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- 1. SPLASH & LOGIN SCREEN -->
+  <section id="screen-auth" class="screen active">
+    <div class="auth-card">
+      <div class="brand-crown">👑</div>
+      <h1 class="luxury-title">DEVIKA</h1>
+      <p class="luxury-sub">BEAUTY PARLOUR & BRIDAL STUDIO</p>
+      <span class="trust-badge">✨ 12+ Years of Trust</span>
+
+      <div class="auth-form">
+        <input type="text" id="auth-name" placeholder="Your Full Name (For New Account)" />
+        <input type="tel" id="auth-phone" maxlength="10" placeholder="10-Digit Mobile Number" />
+        <input type="password" id="auth-pin" maxlength="4" inputmode="numeric" placeholder="Create / Enter 4-Digit Secret PIN" />
+        <select id="auth-bday">
+          <option value="">🎂 Select Birthday Month (For Free Gift)</option>
+          <option value="01">January</option>
+          <option value="02">February</option>
+          <option value="03">March</option>
+          <option value="04">April</option>
+          <option value="05">May</option>
+          <option value="06">June</option>
+          <option value="07">July</option>
+          <option value="08">August</option>
+          <option value="09">September</option>
+          <option value="10">October</option>
+          <option value="11">November</option>
+          <option value="12">December</option>
+        </select>
+        <button id="btn-login" class="btn-gold">✨ Enter Studio (+50 Coins Bonus)</button>
+        <button id="btn-guest" class="btn-outline">Explore Rates as Guest 👀</button>
+      </div>
+      <p class="owner-trigger" onclick="openOwnerPinModal()">🔐 Devika Ji Studio Login</p>
+    </div>
+  </section>
+
+  <!-- MAIN APP CONTAINER -->
+  <div id="app-shell" class="hidden">
+    
+    <!-- TOP LUXURY HEADER -->
+    <header class="top-bar">
+      <div class="brand-mini">
+        <span class="mini-title">DEVIKA STUDIO</span>
+        <span id="live-shop-status" class="status-pill open">🟢 Open Now</span>
+      </div>
+      <div class="wallet-pill" onclick="switchScreen('screen-wallet')">
+        <span>🪙</span>
+        <strong id="header-coins">50</strong>
+      </div>
+    </header>
+
+    <!-- 2. HOME SUPER-SCREEN -->
+    <main id="screen-home" class="screen">
+      <div class="search-box">
+        <span>🔍</span>
+        <input type="text" id="global-search" placeholder="Search facial, wax, bridal makeup..." />
+      </div>
+
+      <!-- AUTO-SLIDING OFFER BANNER -->
+      <div class="banner-slider" id="banner-slider">
+        <div class="banner-card active">
+          <span class="tag">BRIDAL SPECIAL</span>
+          <h2>Royal HD Bridal Glow</h2>
+          <p>Get 10% VIP Cashback on Pre-Bridal + HD Makeup</p>
+          <button onclick="switchScreen('screen-bridal')">View Lookbook →</button>
+        </div>
+        <div class="banner-card">
+          <span class="tag">FESTIVE COMBO</span>
+          <h2>O3+ Gold Facial + Threading</h2>
+          <p>Instant Parlour Radiance at just ₹799</p>
+          <button onclick="switchScreen('screen-services')">Book Now →</button>
+        </div>
+      </div>
+
+      <!-- SMART ADVISOR CARD -->
+      <div class="advisor-banner" onclick="switchScreen('screen-advisor')">
+        <div>
+          <h3>✨ Smart Skin & Hair Advisor</h3>
+          <p>Select your concern, get expert treatment suggestions</p>
+        </div>
+        <span class="arrow-circle">➔</span>
+      </div>
+
+      <!-- 8 LUXURY CATEGORIES GRID -->
+      <h3 class="section-heading">Our Signature Services</h3>
+      <div class="category-grid" id="category-grid">
+        <div class="cat-card" onclick="openCategory('Facial')"><span>✨</span><p>Facial & Cleanup</p></div>
+        <div class="cat-card" onclick="openCategory('Bridal')"><span>👰</span><p>Bridal & Party</p></div>
+        <div class="cat-card" onclick="openCategory('Hair')"><span>💇‍♀️</span><p>Hair Spa & Cut</p></div>
+        <div class="cat-card" onclick="openCategory('Waxing')"><span>🍯</span><p>Rica & Honey Wax</p></div>
+        <div class="cat-card" onclick="openCategory('Threading')"><span>👁️</span><p>Threading & Bleach</p></div>
+        <div class="cat-card" onclick="openCategory('ManiPedi')"><span>💅</span><p>Mani-Pedi & Nails</p></div>
+        <div class="cat-card" onclick="openCategory('Mehendi')"><span>🌿</span><p>Bridal Mehendi</p></div>
+        <div class="cat-card" onclick="switchScreen('screen-store')"><span>🛍️</span><p>Beauty Store</p></div>
+      </div>
+
+      <!-- TRENDING COMBOS -->
+      <h3 class="section-heading">🔥 Most Booked Packages</h3>
+      <div id="trending-list" class="card-list"></div>
+    </main>
+
+    <!-- 3. CATEGORY & RATE CARD SCREEN -->
+    <section id="screen-services" class="screen hidden">
+      <div class="screen-header">
+        <h2 id="cat-title">All Services & Rate Card</h2>
+        <div class="filter-chips" id="brand-filters">
+          <button class="chip active" data-brand="ALL">All</button>
+          <button class="chip" data-brand="O3+">O3+</button>
+          <button class="chip" data-brand="Lotus">Lotus</button>
+          <button class="chip" data-brand="VLCC">VLCC</button>
+        </div>
+      </div>
+      <div id="services-container" class="card-list"></div>
+    </section>
+
+    <!-- 4. SERVICE DETAIL MODAL/SCREEN -->
+    <section id="screen-detail" class="screen hidden">
+      <button class="back-btn" onclick="switchScreen('screen-services')">← Back</button>
+      <div id="service-detail-content"></div>
+    </section>
+
+    <!-- 5. SKIN & HAIR ADVISOR SCREEN -->
+    <section id="screen-advisor" class="screen hidden">
+      <h2>✨ Select Your Skin or Hair Concern</h2>
+      <div class="problem-grid" id="problem-grid"></div>
+      <div id="advisor-results" class="card-list"></div>
+    </section>
+
+    <!-- 6. BRIDAL LOOKBOOK SCREEN -->
+    <section id="screen-bridal" class="screen hidden">
+      <h2>👰 Devika Bridal & HD Studio</h2>
+      <div class="filter-chips" id="bridal-filters">
+        <button class="chip active" data-style="ALL">All Looks</button>
+        <button class="chip" data-style="Royal">Royal Bridal</button>
+        <button class="chip" data-style="HD">HD Makeup</button>
+        <button class="chip" data-style="Party">Party / Haldi</button>
+      </div>
+      <div id="bridal-gallery" class="gallery-grid"></div>
+    </section>
+
+    <!-- 7. MINI BEAUTY STORE SCREEN -->
+    <section id="screen-store" class="screen hidden">
+      <h2>🛍️ Devika Beauty Mini-Store</h2>
+      <p class="sub-note">100% Authentic Creams, Serums & Hair Care Products</p>
+      <div id="store-products" class="card-list"></div>
+    </section>
+
+    <!-- 8. SMART CART & SLOT BOOKING SCREEN -->
+    <section id="screen-cart" class="screen hidden">
+      <h2>🛒 Your Bill & Slot Booking</h2>
+      <div id="cart-items-list"></div>
+      <div id="cart-billing-box" class="billing-card"></div>
+      <div id="slot-picker-box" class="slot-card"></div>
+    </section>
+
+    <!-- 9. VIP WALLET, SPIN WHEEL & HISTORY SCREEN -->
+    <section id="screen-wallet" class="screen hidden">
+      <div id="vip-card-container"></div>
+      <div id="spin-wheel-container"></div>
+      <h3 class="section-heading">📜 Your Booking History</h3>
+      <div id="booking-history-list"></div>
+    </section>
+
+    <!-- 10 & 11. DEVIKA JI OWNER COMMAND CENTER -->
+    <section id="screen-owner" class="screen hidden">
+      <div class="owner-top">
+        <h2>👑 Devika Ji Command Center</h2>
+        <button class="btn-small" onclick="switchScreen('screen-home')">Exit</button>
+      </div>
+      <div id="owner-dashboard-content"></div>
+    </section>
+
+    <!-- FLOATING CART BAR -->
+    <div id="floating-cart" class="floating-cart hidden" onclick="switchScreen('screen-cart')">
+      <div>
+        <strong id="float-count">0 Services</strong> • <span id="float-time">0 mins</span>
+      </div>
+      <div class="float-right">
+        <strong id="float-total">₹0</strong> <span>Proceed →</span>
+      </div>
+    </div>
+
+    <!-- BOTTOM 5-BUTTON NAVIGATION -->
+    <nav class="bottom-nav">
+      <button class="nav-btn active" onclick="switchScreen('screen-home', this)"><span>🏠</span><small>Home</small></button>
+      <button class="nav-btn" onclick="switchScreen('screen-services', this)"><span>📋</span><small>Rates</small></button>
+      <button class="nav-btn" onclick="switchScreen('screen-bridal', this)"><span>👰</span><small>Bridal</small></button>
+      <button class="nav-btn" onclick="switchScreen('screen-cart', this)"><span>🛒</span><small>Booking</small></button>
+      <button class="nav-btn" onclick="switchScreen('screen-wallet', this)"><span>👑</span><small>VIP Club</small></button>
+    </nav>
+  </div>
+
+  <!-- OWNER PIN POPUP -->
+  <div id="owner-modal" class="modal hidden">
+    <div class="modal-box">
+      <h3>🔐 Devika Ji Admin PIN</h3>
+      <input type="password" id="owner-pin-input" maxlength="4" inputmode="numeric" placeholder="4-Digit Admin PIN" />
+      <div class="modal-actions">
+        <button onclick="closeOwnerModal()" class="btn-outline">Cancel</button>
+        <button onclick="verifyOwnerPin()" class="btn-gold">Unlock</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+  </html>
+  
